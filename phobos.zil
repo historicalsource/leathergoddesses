@@ -591,17 +591,25 @@ writing on it.")
 	(ADJECTIVE DISCARDED CRUMPLED)
 	(FLAGS TAKEBIT BURNBIT READBIT)
 	(SIZE 2)
-	(TEXT
-"There's a seemingly meaningless matrix of letters on the paper:|
-   HESOHREBBUR|
+	(ACTION SCRAP-OF-PAPER-F)>
+
+<ROUTINE SCRAP-OF-PAPER-F ()
+	 <COND (<VERB? READ>
+		<TELL
+"There's a seemingly meaningless matrix of letters on the paper:" CR>
+		<PUT 0 8 <BOR <GET 0 8> 2>> ;"turns on fixed spacing for Mac"
+		<TELL
+;"after removing all the letters from all the words on the parts list, the
+remaining letters spell HISSING FRIGHTENS FLY TRAPS"
+"   HESOHREBBUR|
    ILSSSIPNGEF|
    RGIUGHTHDEN|
    SNKOOBENOHP|
    FALYTMERATP|
    SHEADLIGHTO|
-   SLLABNOTTOC"
-;"after removing all the letters from all the words on the parts list, the
-remaining letters spell HISSING FRIGHTENS FLY TRAPS")>
+   SLLABNOTTOC">
+		<PUT 0 8 <BAND <GET 0 8> -3>> ;"turns off fixed spacing"
+		<RTRUE>)>>
 
 <GLOBAL HOLE-OPEN <>>
 
