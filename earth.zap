@@ -1,0 +1,433 @@
+
+
+	.FUNCT	JOES-BAR-F,RARG
+	EQUAL?	RARG,M-LOOK \FALSE
+	PRINTI	"An undistinguished bar, yet the social center of Upper Sandusky. The front door is almost lost amidst the hazy maze of neon that shrouds the grimy glass of the south wall. "
+	PRINT	DOORS-MARKED
+	RTRUE	
+
+
+	.FUNCT	BAR-DOOR-F
+	EQUAL?	PRSA,V?ENTER \?ELS5
+	CALL	DO-WALK,P?SOUTH
+	RSTACK	
+?ELS5:	EQUAL?	PRSA,V?CLOSE,V?OPEN \?ELS7
+	PRINTR	"It's a swinging door."
+?ELS7:	EQUAL?	PRSA,V?LOOK-INSIDE \FALSE
+	CALL	PERFORM-PRSA,WINDOW
+	RTRUE	
+
+
+	.FUNCT	BAR-F
+	EQUAL?	PRSA,V?DISEMBARK,V?EXIT,V?LEAVE \?ELS5
+	CALL	DO-WALK,P?SOUTH
+	RSTACK	
+?ELS5:	EQUAL?	PRSA,V?BOARD,V?WALK-TO,V?ENTER \?ELS7
+	PRINT	LOOK-AROUND
+	RTRUE	
+?ELS7:	EQUAL?	PRSA,V?EXAMINE \?ELS9
+	CALL	V-LOOK
+	RSTACK	
+?ELS9:	EQUAL?	PRSA,V?SEARCH \FALSE
+	PRINT	NOTHING-NEW
+	RTRUE	
+
+
+	.FUNCT	JOE-F
+	EQUAL?	PRSA,V?TELL /?THN6
+	EQUAL?	PRSA,V?ASK-FOR \?ELS5
+	EQUAL?	PRSI,BEER \?ELS5
+?THN6:	PRINTI	"""You've had enough."""
+	CRLF	
+	CALL	STOP
+	RSTACK	
+?ELS5:	EQUAL?	PRSA,V?EXAMINE \FALSE
+	PRINTR	"Joe is bartending."
+
+
+	.FUNCT	BEER-F
+	EQUAL?	PRSA,V?BUY \FALSE
+	EQUAL?	HERE,JOES-BAR \FALSE
+	PRINTI	"The bartender"
+	CALL	RUNNING?,I-URGE
+	ZERO?	STACK /?CND8
+	PRINTI	", a keen judge of bladders,"
+?CND8:	PRINTI	" says, "
+	CALL	PERFORM,V?TELL,JOE
+	RTRUE	
+
+
+	.FUNCT	GARMENT-F
+	CALL	WRONG-SEX-WORD,GARMENT,W?LOINCLOTH,W?BIKINI
+	ZERO?	STACK /?ELS5
+	CALL	STOP
+	RSTACK	
+?ELS5:	EQUAL?	PRSA,V?EXAMINE \?ELS7
+	FSET?	CELL,TOUCHBIT \?ELS7
+	PRINTI	"The "
+	CALL	DPRINT,GARMENT
+	PRINTR	", tight but comfy, covers only the ""bare essentials."""
+?ELS7:	EQUAL?	PRSA,V?LOOK-INSIDE \?ELS11
+	PRINTI	"1. You
+2. A "
+	CALL	DPRINT,COMIC-BOOK
+	CRLF	
+	RTRUE	
+?ELS11:	EQUAL?	PRSA,V?TAKE-OFF /?THN14
+	EQUAL?	PRSA,V?TAKE \FALSE
+	ZERO?	GONE-APE /FALSE
+?THN14:	PRINTI	"But"
+	CALL	TPRINT,GARMENT
+	FSET?	GARMENT,PLURALBIT \?ELS20
+	PRINTI	" are"
+	JUMP	?CND18
+?ELS20:	PRINTI	" is"
+?CND18:	PRINTR	" so becoming!"
+
+
+	.FUNCT	POCKET-F
+	EQUAL?	PRSA,V?LOOK-INSIDE \?ELS5
+	PRINTI	"There's"
+	CALL	APRINT,COMIC-BOOK
+	PRINTR	" there."
+?ELS5:	EQUAL?	PRSA,V?PUT \FALSE
+	EQUAL?	PRSI,POCKET \FALSE
+	PRINTI	"There's no room. "
+	CALL	PERFORM,V?LOOK-INSIDE,POCKET
+	RTRUE	
+
+
+	.FUNCT	COMIC-BOOK-F
+	EQUAL?	PRSA,V?BURN,V?TAKE,V?REMOVE \?ELS5
+	EQUAL?	PRSO,COMIC-BOOK \?ELS5
+	PRINTI	"You change your mind and"
+	PRINT	STICK-IT-IN-POCKET
+	PRINTR	" instead."
+?ELS5:	EQUAL?	PRSA,V?OPEN,V?LOOK-INSIDE,V?READ \FALSE
+	FSET?	CELL,TOUCHBIT \?ELS12
+	PRINTI	"""Hello, Prisoner!
+   You are a captive of "
+	PRINTD	LGOP
+	PRINTI	". As an experimental subject, your unspeakably painful death will help our effort to enslave humanity and turn the Earth into our private pleasure world. Consider this to be a great honor, human.""
+   The remainder of the book covers the exacting rules of behavior expected of a prisoner of "
+	PRINTD	LGOP
+	PRINTI	". For example, it mentions that escapees will be killed immediately and painfully by crack Leckbandi guards."
+	JUMP	?CND10
+?ELS12:	CALL	IN-YOUR-PACKAGE,STR?205
+?CND10:	PRINTI	" After reading it, you"
+	PRINT	STICK-IT-IN-POCKET
+	PRINT	PERIOD-CR
+	RTRUE	
+
+
+	.FUNCT	FLASHLIGHT-F
+	EQUAL?	PRSA,V?LOOK-INSIDE,V?OPEN \?ELS5
+	PRINTI	"The "
+	PRINTD	FLASHLIGHT
+	PRINTR	" has rusted shut."
+?ELS5:	EQUAL?	PRSA,V?POINT \FALSE
+	FSET?	FLASHLIGHT,ONBIT \FALSE
+	ZERO?	PRSI /FALSE
+	PRINT	NOTHING-NEW
+	RTRUE	
+
+
+	.FUNCT	MENS-ROOM-ENTER-F
+	ZERO?	SEX-CHOSEN \?ELS5
+	SET	'SEX-CHOSEN,TRUE-VALUE
+	SET	'MALE,TRUE-VALUE
+	MOVE	STOOL,MENS-ROOM
+	FSET	SULTANS-WIFE,FEMALEBIT
+	FSET	HAREM-GUARD,FEMALEBIT
+	FSET	YOUNG-WOMAN,FEMALEBIT
+	PUTP	SIDEKICK,P?SDESC,STR?207
+	PUTP	SIDEKICKS-BODY,P?SDESC,STR?208
+	PUTP	SPLATTERED-SIDEKICK,P?SDESC,STR?209
+	PUTP	THORBAST,P?SDESC,STR?210
+	PUTP	THORBAST-SWORD,P?SDESC,STR?211
+	PUTP	SULTAN,P?SDESC,STR?212
+	PUTP	YOUNG-WOMAN,P?SDESC,STR?213
+	PUTP	PHOTO,P?SDESC,STR?214
+	PUTP	HAREM,P?ODOR,STR?215
+	RETURN	MENS-ROOM
+?ELS5:	ZERO?	MALE /?ELS7
+	RETURN	MENS-ROOM
+?ELS7:	PRINTD	MENS-ROOM
+	CALL	WRONG-BATHROOM,STR?216
+	RFALSE	
+
+
+	.FUNCT	LADIES-ROOM-ENTER-F
+	ZERO?	SEX-CHOSEN \?ELS5
+	SET	'SEX-CHOSEN,TRUE-VALUE
+	MOVE	STOOL,LADIES-ROOM
+	FSET	ME,FEMALEBIT
+	FSET	SULTAN,FEMALEBIT
+	FSET	SIDEKICK,FEMALEBIT
+	FSET	THORBAST,FEMALEBIT
+	PUTP	SIDEKICK,P?SDESC,STR?217
+	PUTP	SIDEKICKS-BODY,P?SDESC,STR?218
+	PUTP	SPLATTERED-SIDEKICK,P?SDESC,STR?219
+	PUTP	THORBAST,P?SDESC,STR?220
+	PUTP	THORBAST-SWORD,P?SDESC,STR?221
+	PUTP	SULTAN,P?SDESC,STR?222
+	PUTP	YOUNG-WOMAN,P?SDESC,STR?223
+	PUTP	PHOTO,P?SDESC,STR?224
+	PUTP	HAREM,P?ODOR,STR?225
+	RETURN	LADIES-ROOM
+?ELS5:	ZERO?	MALE /?ELS7
+	PRINTD	LADIES-ROOM
+	CALL	WRONG-BATHROOM,STR?226
+	RFALSE	
+?ELS7:	RETURN	LADIES-ROOM
+
+
+	.FUNCT	WRONG-BATHROOM,STRING
+	PRINTI	"
+   As you enter the wrong bathroom, a "
+	PRINT	STRING
+	PRINTI	". You hustle out.
+
+"
+	CALL	DESCRIBE-ROOM
+	RSTACK	
+
+
+	.FUNCT	BATHROOM-F,RARG
+	EQUAL?	RARG,M-LOOK \?ELS5
+	PRINTI	"This filthy bathroom belies the existence of disinfectant. A single toilet and sink are the only fixtures. More breathable air can be found to the south"
+	EQUAL?	HERE,MENS-ROOM \?ELS8
+	PRINTI	"ea"
+	JUMP	?CND6
+?ELS8:	PRINTI	"we"
+?CND6:	PRINTI	"st."
+	RTRUE	
+?ELS5:	EQUAL?	RARG,M-SMELL \FALSE
+	CALL	THIS-IS-IT,PIZZA
+	MOVE	PIZZA,HERE
+	PRINTI	"You trace the smell to"
+	CALL	APRINT,PIZZA
+	PRINTI	", crumpled in the corner. [Incidentally, we had some pretty putrid scents available, all of which would've seemed right at home in a filthy restroom. In the end, we were too kind to use them -- but we were sorely tempted!]"
+	RTRUE	
+
+
+	.FUNCT	MENS-ROOM-OBJECT-F
+	EQUAL?	PRSA,V?ENTER,V?FIND \?ELS5
+	EQUAL?	HERE,JOES-BAR \?ELS10
+	CALL	DO-WALK,P?NW
+	RSTACK	
+?ELS10:	PRINT	LOOK-AROUND
+	RTRUE	
+?ELS5:	EQUAL?	PRSA,V?WALK-TO \?ELS14
+	EQUAL?	HERE,JOES-BAR \?ELS19
+	CALL	DO-WALK,P?NW
+	RSTACK	
+?ELS19:	EQUAL?	HERE,MENS-ROOM \FALSE
+	CALL	V-PEE
+	RSTACK	
+?ELS14:	EQUAL?	PRSA,V?DISEMBARK,V?LEAVE,V?EXIT \?ELS23
+	EQUAL?	HERE,MENS-ROOM \?ELS28
+	CALL	DO-WALK,P?SE
+	RSTACK	
+?ELS28:	PRINT	LOOK-AROUND
+	RTRUE	
+?ELS23:	EQUAL?	PRSA,V?LOOK-INSIDE \?ELS32
+	EQUAL?	HERE,MENS-ROOM \?ELS37
+	PRINT	LOOK-AROUND
+	RTRUE	
+?ELS37:	PRINT	CANT-FROM-HERE
+	RTRUE	
+?ELS32:	EQUAL?	PRSA,V?SEARCH \?ELS41
+	PRINT	NOTHING-NEW
+	RTRUE	
+?ELS41:	EQUAL?	PRSA,V?USE \?ELS43
+	EQUAL?	HERE,JOES-BAR \?ELS48
+	PRINT	LOOK-AROUND
+	RTRUE	
+?ELS48:	CALL	V-PEE
+	RSTACK	
+?ELS43:	EQUAL?	PRSA,V?EXAMINE \FALSE
+	PRINTR	"Filthy."
+
+
+	.FUNCT	LADIES-ROOM-OBJECT-F
+	EQUAL?	PRSA,V?ENTER,V?FIND \?ELS5
+	EQUAL?	HERE,JOES-BAR \?ELS10
+	CALL	DO-WALK,P?NE
+	RSTACK	
+?ELS10:	PRINT	LOOK-AROUND
+	RTRUE	
+?ELS5:	EQUAL?	PRSA,V?WALK-TO \?ELS14
+	EQUAL?	HERE,JOES-BAR \?ELS19
+	CALL	DO-WALK,P?NE
+	RSTACK	
+?ELS19:	EQUAL?	HERE,LADIES-ROOM \FALSE
+	CALL	V-PEE
+	RSTACK	
+?ELS14:	EQUAL?	PRSA,V?DISEMBARK,V?LEAVE,V?EXIT \?ELS23
+	EQUAL?	HERE,LADIES-ROOM \?ELS28
+	CALL	DO-WALK,P?SW
+	RSTACK	
+?ELS28:	PRINT	LOOK-AROUND
+	RTRUE	
+?ELS23:	EQUAL?	PRSA,V?LOOK-INSIDE \?ELS32
+	EQUAL?	HERE,LADIES-ROOM \?ELS37
+	PRINT	LOOK-AROUND
+	RTRUE	
+?ELS37:	PRINT	CANT-FROM-HERE
+	RTRUE	
+?ELS32:	EQUAL?	PRSA,V?SEARCH \?ELS41
+	PRINT	NOTHING-NEW
+	RTRUE	
+?ELS41:	EQUAL?	PRSA,V?EXAMINE,V?USE \FALSE
+	CALL	PERFORM-PRSA,MENS-ROOM-OBJECT
+	RTRUE	
+
+
+	.FUNCT	GENERIC-RESTROOM-F
+	EQUAL?	PRSA,V?ENTER,V?FIND,V?WALK-TO \?ELS5
+	EQUAL?	HERE,JOES-BAR \?ELS5
+	PRINT	DOORS-MARKED
+	CRLF	
+	RETURN	NOT-HERE-OBJECT
+?ELS5:	EQUAL?	PRSA,V?WALK-TO \?ELS9
+	CALL	V-PEE
+	RETURN	NOT-HERE-OBJECT
+?ELS9:	ZERO?	SEX-CHOSEN /FALSE
+	ZERO?	MALE /?ELS17
+	RETURN	MENS-ROOM-OBJECT
+?ELS17:	RETURN	LADIES-ROOM-OBJECT
+
+
+	.FUNCT	TOILET-F
+	EQUAL?	PRSA,V?USE,V?PEE-IN \?ELS5
+	CALL	V-PEE
+	RSTACK	
+?ELS5:	EQUAL?	PRSA,V?CLOSE \?ELS7
+	CALL	NO-LID
+	RSTACK	
+?ELS7:	EQUAL?	PRSA,V?FLUSH \?ELS9
+	PRINTR	"Probably the first fresh water to enter this john in a month."
+?ELS9:	EQUAL?	PRSA,V?EXAMINE,V?LOOK-INSIDE \FALSE
+	PRINT	YECHH
+	RTRUE	
+
+
+	.FUNCT	SINK-F
+	EQUAL?	PRSA,V?EXAMINE,V?LOOK-INSIDE \FALSE
+	CALL	PERFORM,V?EXAMINE,TOILET
+	RTRUE	
+
+
+	.FUNCT	STOOL-F
+	EQUAL?	PRSA,V?EXAMINE \?ELS5
+	FSET?	STOOL,TOUCHBIT /?ELS5
+	PRINTR	"It's safe to take, if you receive my meaning."
+?ELS5:	EQUAL?	PRSA,V?CLIMB,V?BOARD \FALSE
+	FIRST?	STOOL \?ELS14
+	CALL	DO-FIRST,STR?228,STOOL
+	RSTACK	
+?ELS14:	IN?	PROTAGONIST,TREE-HOLE \FALSE
+	MOVE	PROTAGONIST,HERE
+	PRINTI	"Using the stool, you"
+	CALL	AND-SIDEKICK,HERE
+	PRINTR	" climb out of the hole."
+
+
+	.FUNCT	I-URGE
+	CALL	QUEUE,I-URGE,-1
+	INC	'URGE-COUNTER
+	PRINTI	"   "
+	EQUAL?	URGE-COUNTER,1 \?ELS5
+	PRINTR	"You feel an urge."
+?ELS5:	EQUAL?	URGE-COUNTER,2 \?ELS7
+	PRINTR	"You trace the urge to the region of your bladder."
+?ELS7:	EQUAL?	URGE-COUNTER,3 \?ELS9
+	PRINTI	"Though operating at far below normal speed, your mind begins to conclude that it would be best at this point to "
+	EQUAL?	HERE,MENS-ROOM,LADIES-ROOM \?ELS12
+	PRINTI	"use the"
+	JUMP	?CND10
+?ELS12:	PRINTI	"find a"
+?CND10:	PRINTR	" bathroom."
+?ELS9:	EQUAL?	URGE-COUNTER,4 \?ELS16
+	PRINTR	"Even if you don't care about your clothes, imagine the embarrassment!"
+?ELS16:	PRINT	YOU-CANT
+	PRINTI	"wait another second. "
+	EQUAL?	HERE,MENS-ROOM,LADIES-ROOM \?ELS23
+	CALL	QUEUE,I-KIDNAPPING,3
+	CALL	DEQUEUE,I-URGE
+	MOVE	PROTAGONIST,HERE
+	PRINTI	"Fortunately, you've stumbled upon a bathroom. A moment later, you are feeling much better, although your thigh muscles are still quivering a tad."
+	CALL	NOTICE-PIZZA-ODOR
+	RSTACK	
+?ELS23:	PRINTI	"Without going into embarrassing detail, you've made a mess. A moment later, before even half the people in Joe's have begun tittering, a flash of green light precedes the arrival of two VERY odd patrons. They rotate their bellies to get a better look at you. As their mouth stalks open you find that, despite an evolution that occurred dozens of astronomical units from Upper Sandusky, these fellows speak in perfect midwestern English.
+   ""This one?""
+   ""A pitiful specimen ... can't even control simple bodily functions ... the tests would be worthless...""
+   ""Agreed. Must've been a screw-up somewhere. Let's take this one instead.""
+   They grab a blonde woman, whose scream is cut short by another green flash. Three weeks later, when the Earth is invaded and everyone is enslaved by "
+	PRINTD	LGOP
+	PRINTI	", you wonder if there was a connection."
+	CRLF	
+	CALL	FINISH
+	RSTACK	
+
+
+	.FUNCT	PIZZA-F
+	EQUAL?	PRSA,V?TAKE,V?TASTE,V?EAT \FALSE
+	FSET	PIZZA,TOUCHBIT
+	PRINTI	"The very thought is enough to make stronger "
+	ZERO?	MALE \?CND6
+	PRINTI	"wo"
+?CND6:	PRINTI	"men than yourself "
+	ZERO?	NAUGHTY-LEVEL \?ELS11
+	PRINTI	"become quite ill"
+	JUMP	?CND9
+?ELS11:	EQUAL?	NAUGHTY-LEVEL,1 \?ELS13
+	PRINTI	"vomit"
+	JUMP	?CND9
+?ELS13:	PRINTI	"puke their guts out"
+?CND9:	PRINT	PERIOD-CR
+	RTRUE	
+
+
+	.FUNCT	NOTICE-PIZZA-ODOR
+	FSET?	NOSE,MUNGBIT /FALSE
+	CALL	THIS-IS-IT,ODOR
+	CRLF	
+	PRINTR	"   Now that the ""crisis"" has passed, you notice a strong and familiar odor pervading the room."
+
+
+	.FUNCT	I-KIDNAPPING
+	IN?	PROTAGONIST,STOOL \?CND1
+	MOVE	STOOL,CELL
+?CND1:	MOVE	PROTAGONIST,HERE
+	ZERO?	MALE /?ELS6
+	PUTP	GARMENT,P?SDESC,STR?229
+	JUMP	?CND4
+?ELS6:	PUTP	GARMENT,P?SDESC,STR?230
+?CND4:	PUTP	COMIC-BOOK,P?SDESC,STR?231
+	FCLEAR	GARMENT,NARTICLEBIT
+	FCLEAR	GARMENT,VOWELBIT
+	FCLEAR	GARMENT,PLURALBIT
+	CALL	ROB,PROTAGONIST,CELL
+	MOVE	GARMENT,PROTAGONIST
+	MOVE	COMIC-BOOK,PROTAGONIST
+	CALL	INCREMENT-SCORE,1,7
+	ZERO?	VERBOSITY /?CND10
+	PRINTI	"   A brilliant flash of green light seems less unusual when followed by the appearance of tentacled aliens, as is the case with the current flash of green light. The tentacles wrap roughly around you as you faint.
+   After an unknown amount of time... Well, let's "
+	ZERO?	NAUGHTY-LEVEL \?ELS15
+	PRINTI	"be frank"
+	JUMP	?CND13
+?ELS15:	PRINTI	"cut the "
+	EQUAL?	NAUGHTY-LEVEL,1 \?ELS20
+	PRINTI	"crap"
+	JUMP	?CND13
+?ELS20:	PRINTI	"bullshit"
+?CND13:	PRINTI	". 7.3 hours later, you wake. Your head feels as if it's been run over by several locomotives, or at least one very large locomotive, and your clothes are now unrecognizable"
+	PRINT	ELLIPSIS
+?CND10:	CALL	GOTO,CELL
+	CALL	CELL-F,M-END
+	RSTACK	
+
+	.ENDI
